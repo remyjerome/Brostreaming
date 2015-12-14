@@ -18,6 +18,14 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new rj\StreamBundle\rjStreamBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
+            // These are the other bundles the SonataAdminBundle relies on
+            new Sonata\CoreBundle\SonataCoreBundle(),
+            new Sonata\BlockBundle\SonataBlockBundle(),
+            new Knp\Bundle\MenuBundle\KnpMenuBundle(),
+
+            // And finally, the storage and SonataAdminBundle
+            new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),
+            new Sonata\AdminBundle\SonataAdminBundle(),
 
         );
 

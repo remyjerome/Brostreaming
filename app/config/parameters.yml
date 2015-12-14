@@ -1,9 +1,8 @@
 # This file is auto-generated during the composer install
-#4da8efd3d852f44d3cf9ac2ae04771ef7b014236
 parameters:
     database_driver: pdo_mysql
     database_host: localhost
-    database_port:
+    database_port: null
     database_name: brostreaqjstream
     database_user: admin
     database_password: admin
@@ -13,4 +12,3 @@ parameters:
     mailer_password: null
     locale: en
     secret: ZjqajiQkgtPcNwSAEKfui3DHh91CZfGm4fNHtVdQ
-

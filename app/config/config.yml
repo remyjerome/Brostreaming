@@ -84,3 +84,11 @@ services:
             - { name: serializer.normalizer }
 fos_js_routing:
     routes_to_expose: [ ^((?!_admin_).)*$ ]
+
+# Sonata configuration
+sonata_block:
+    default_contexts: [cms]
+    blocks:
+        # enable the SonataAdminBundle block
+        sonata.admin.block.admin_list:
+            contexts: [admin]

@@ -5,3 +5,6 @@ rj_stream:
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
 
+admin_area:
+    resource: "@SonataAdminBundle/Resources/config/routing/sonata_admin.xml"
+    prefix: /admin
