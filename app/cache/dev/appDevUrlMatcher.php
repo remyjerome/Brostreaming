@@ -253,6 +253,85 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
                 return array (  '_controller' => 'sonata.admin.controller.admin:retrieveAutocompleteItemsAction',  '_route' => 'sonata_admin_retrieve_autocomplete_items',);
             }
 
+            if (0 === strpos($pathinfo, '/admin/rj/stream')) {
+                if (0 === strpos($pathinfo, '/admin/rj/stream/episode')) {
+                    // admin_rj_stream_episode_list
+                    if ($pathinfo === '/admin/rj/stream/episode/list') {
+                        return array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::listAction',  '_sonata_admin' => 'admin.episode',  '_sonata_name' => 'admin_rj_stream_episode_list',  '_route' => 'admin_rj_stream_episode_list',);
+                    }
+
+                    // admin_rj_stream_episode_create
+                    if ($pathinfo === '/admin/rj/stream/episode/create') {
+                        return array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::createAction',  '_sonata_admin' => 'admin.episode',  '_sonata_name' => 'admin_rj_stream_episode_create',  '_route' => 'admin_rj_stream_episode_create',);
+                    }
+
+                    // admin_rj_stream_episode_batch
+                    if ($pathinfo === '/admin/rj/stream/episode/batch') {
+                        return array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::batchAction',  '_sonata_admin' => 'admin.episode',  '_sonata_name' => 'admin_rj_stream_episode_batch',  '_route' => 'admin_rj_stream_episode_batch',);
+                    }
+
+                    // admin_rj_stream_episode_edit
+                    if (preg_match('#^/admin/rj/stream/episode/(?P<id>[^/]++)/edit$#s', $pathinfo, $matches)) {
+                        return $this->mergeDefaults(array_replace($matches, array('_route' => 'admin_rj_stream_episode_edit')), array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::editAction',  '_sonata_admin' => 'admin.episode',  '_sonata_name' => 'admin_rj_stream_episode_edit',));
+                    }
+
+                    // admin_rj_stream_episode_delete
+                    if (preg_match('#^/admin/rj/stream/episode/(?P<id>[^/]++)/delete$#s', $pathinfo, $matches)) {
+                        return $this->mergeDefaults(array_replace($matches, array('_route' => 'admin_rj_stream_episode_delete')), array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::deleteAction',  '_sonata_admin' => 'admin.episode',  '_sonata_name' => 'admin_rj_stream_episode_delete',));
+                    }
+
+                    // admin_rj_stream_episode_show
+                    if (preg_match('#^/admin/rj/stream/episode/(?P<id>[^/]++)/show$#s', $pathinfo, $matches)) {
+                        return $this->mergeDefaults(array_replace($matches, array('_route' => 'admin_rj_stream_episode_show')), array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::showAction',  '_sonata_admin' => 'admin.episode',  '_sonata_name' => 'admin_rj_stream_episode_show',));
+                    }
+
+                    // admin_rj_stream_episode_export
+                    if ($pathinfo === '/admin/rj/stream/episode/export') {
+                        return array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::exportAction',  '_sonata_admin' => 'admin.episode',  '_sonata_name' => 'admin_rj_stream_episode_export',  '_route' => 'admin_rj_stream_episode_export',);
+                    }
+
+                }
+
+                if (0 === strpos($pathinfo, '/admin/rj/stream/news')) {
+                    // admin_rj_stream_news_list
+                    if ($pathinfo === '/admin/rj/stream/news/list') {
+                        return array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::listAction',  '_sonata_admin' => 'admin.news',  '_sonata_name' => 'admin_rj_stream_news_list',  '_route' => 'admin_rj_stream_news_list',);
+                    }
+
+                    // admin_rj_stream_news_create
+                    if ($pathinfo === '/admin/rj/stream/news/create') {
+                        return array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::createAction',  '_sonata_admin' => 'admin.news',  '_sonata_name' => 'admin_rj_stream_news_create',  '_route' => 'admin_rj_stream_news_create',);
+                    }
+
+                    // admin_rj_stream_news_batch
+                    if ($pathinfo === '/admin/rj/stream/news/batch') {
+                        return array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::batchAction',  '_sonata_admin' => 'admin.news',  '_sonata_name' => 'admin_rj_stream_news_batch',  '_route' => 'admin_rj_stream_news_batch',);
+                    }
+
+                    // admin_rj_stream_news_edit
+                    if (preg_match('#^/admin/rj/stream/news/(?P<id>[^/]++)/edit$#s', $pathinfo, $matches)) {
+                        return $this->mergeDefaults(array_replace($matches, array('_route' => 'admin_rj_stream_news_edit')), array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::editAction',  '_sonata_admin' => 'admin.news',  '_sonata_name' => 'admin_rj_stream_news_edit',));
+                    }
+
+                    // admin_rj_stream_news_delete
+                    if (preg_match('#^/admin/rj/stream/news/(?P<id>[^/]++)/delete$#s', $pathinfo, $matches)) {
+                        return $this->mergeDefaults(array_replace($matches, array('_route' => 'admin_rj_stream_news_delete')), array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::deleteAction',  '_sonata_admin' => 'admin.news',  '_sonata_name' => 'admin_rj_stream_news_delete',));
+                    }
+
+                    // admin_rj_stream_news_show
+                    if (preg_match('#^/admin/rj/stream/news/(?P<id>[^/]++)/show$#s', $pathinfo, $matches)) {
+                        return $this->mergeDefaults(array_replace($matches, array('_route' => 'admin_rj_stream_news_show')), array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::showAction',  '_sonata_admin' => 'admin.news',  '_sonata_name' => 'admin_rj_stream_news_show',));
+                    }
+
+                    // admin_rj_stream_news_export
+                    if ($pathinfo === '/admin/rj/stream/news/export') {
+                        return array (  '_controller' => 'Sonata\\AdminBundle\\Controller\\CRUDController::exportAction',  '_sonata_admin' => 'admin.news',  '_sonata_name' => 'admin_rj_stream_news_export',  '_route' => 'admin_rj_stream_news_export',);
+                    }
+
+                }
+
+            }
+
         }
 
         if (0 === strpos($pathinfo, '/_console')) {

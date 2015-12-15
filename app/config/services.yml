@@ -1,9 +1,21 @@
 # Learn more about services, parameters and containers at
 # http://symfony.com/doc/current/book/service_container.html
+
 parameters:
 #    parameter_name: value
 
-services:
+#services:
 #    service_name:
 #        class: AppBundle\Directory\ClassName
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+services:
+    admin.episode:
+        class: rj\StreamBundle\Admin\EpisodeAdmin
+        arguments: [~, rj\StreamBundle\Entity\Episode, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Stream, label: Episode }
+    admin.news:
+        class: rj\StreamBundle\Admin\NewsAdmin
+        arguments: [~, rj\StreamBundle\Entity\News, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Stream, label: News }
