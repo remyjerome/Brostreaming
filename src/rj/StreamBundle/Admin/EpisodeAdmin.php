@@ -6,25 +6,18 @@ use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Show\ShowMapper;
 
 class EpisodeAdmin extends Admin
 {
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('saison', 'text')
-            ->add('episode', 'text')
+            ->add('saison', 'integer')
+            ->add('episode', 'integer')
             ->add('titre', 'text')
             ->add('description', 'textarea')
             ->add('lien', 'text')
-            ->add('_action', 'actions', array(
-                'actions' => array(
-                    'view' => array(),
-                    'edit' => array(),
-                    'delete' => array(),
-                                    )
-                ))
-
             ;
     }
 
@@ -41,8 +34,21 @@ class EpisodeAdmin extends Admin
             ->add('saison', 'text')
             ->add('episode', 'text')
             ->add('titre', 'text')
-            ->add('description', 'textarea')
-            ->add('lien', 'text');
+            #->add('description', 'textarea')
+            ->add('lien', 'text')
+            ->add('draft')
+            ->add('_action', 'actions', array(
+                 'actions' => array(
+                 'show' => array(),
+                 'edit' => array(),
+            )))
+            ;
 
+    }
+    protected function configureShowFields(ShowMapper $showMapper)
+    {
+        $showMapper
+            ->add('lien')
+        ;
     }
 }

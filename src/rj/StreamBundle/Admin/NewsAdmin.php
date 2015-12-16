@@ -12,7 +12,9 @@ class NewsAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('titre', 'text')
+            ->add('titre', 'text', array(
+                'label' => 'News Titre'
+            ))
             ->add('description', 'textarea')
             ->add('auteur', 'text')
             ->add('image','text')
@@ -27,7 +29,7 @@ class NewsAdmin extends Admin
         $datagridMapper
                 ->add('date')
                 ->add('auteur')
-                ->add('tag1')
+                ->add('datesort', 'doctrine_orm_datetime', array())
                 ;
     }
 
@@ -38,6 +40,11 @@ class NewsAdmin extends Admin
             ->add('description')
             ->add('auteur')
             ->add('date')
+            ->add('_action', 'actions', array(
+                 'actions' => array(
+                 'show' => array(),
+                 'edit' => array(),
+            )))
             ;
 
     }

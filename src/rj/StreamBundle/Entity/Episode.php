@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Episode
 {
-    
+
     /**
      * @var integer
      *
@@ -86,7 +86,8 @@ class Episode
     private $date;
 
 
-    
+
+
 
     /**
      * Set saison
@@ -104,7 +105,7 @@ class Episode
     /**
      * Get saison
      *
-     * @return integer 
+     * @return integer
      */
     public function getSaison()
     {
@@ -127,7 +128,7 @@ class Episode
     /**
      * Get episode
      *
-     * @return integer 
+     * @return integer
      */
     public function getEpisode()
     {
@@ -150,7 +151,7 @@ class Episode
     /**
      * Get titre
      *
-     * @return string 
+     * @return string
      */
     public function getTitre()
     {
@@ -173,7 +174,7 @@ class Episode
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -196,7 +197,7 @@ class Episode
     /**
      * Get vue
      *
-     * @return integer 
+     * @return integer
      */
     public function getVue()
     {
@@ -219,7 +220,7 @@ class Episode
     /**
      * Get note
      *
-     * @return float 
+     * @return float
      */
     public function getNote()
     {
@@ -242,7 +243,7 @@ class Episode
     /**
      * Get lien
      *
-     * @return string 
+     * @return string
      */
     public function getLien()
     {
@@ -265,16 +266,16 @@ class Episode
     /**
      * Get date
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate()
     {
         return $this->date;
     }
-    public function __construct($saison, $episode)
+    public function __construct()
     {
-        $this->saison = $saison;
-        $this->episode = $episode;
+        #$this->saison = $saison;
+        #$this->episode = $episode;
         $this->date = new \Datetime();
         $this->note = 50;
         $this->vue = 0;
@@ -298,7 +299,7 @@ class Episode
     /**
      * Get nbnote
      *
-     * @return integer 
+     * @return integer
      */
     public function getNbnote()
     {
@@ -321,7 +322,7 @@ class Episode
     /**
      * Get nbnoteplus
      *
-     * @return integer 
+     * @return integer
      */
     public function getNbnoteplus()
     {
@@ -344,7 +345,7 @@ class Episode
     /**
      * Get nbnotemoins
      *
-     * @return integer 
+     * @return integer
      */
     public function getNbnotemoins()
     {
