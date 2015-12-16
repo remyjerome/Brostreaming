@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Episode
 {
-    
+
     /**
      * @var integer
      *
@@ -85,8 +85,15 @@ class Episode
      */
     private $date;
 
+    /**
+    * @var boolean $etat
+    *
+    * @ORM\Column(name="etat", type="boolean")
+    */
+    private $etat;
 
-    
+
+
 
     /**
      * Set saison
@@ -104,7 +111,7 @@ class Episode
     /**
      * Get saison
      *
-     * @return integer 
+     * @return integer
      */
     public function getSaison()
     {
@@ -127,7 +134,7 @@ class Episode
     /**
      * Get episode
      *
-     * @return integer 
+     * @return integer
      */
     public function getEpisode()
     {
@@ -150,7 +157,7 @@ class Episode
     /**
      * Get titre
      *
-     * @return string 
+     * @return string
      */
     public function getTitre()
     {
@@ -173,7 +180,7 @@ class Episode
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -196,7 +203,7 @@ class Episode
     /**
      * Get vue
      *
-     * @return integer 
+     * @return integer
      */
     public function getVue()
     {
@@ -219,7 +226,7 @@ class Episode
     /**
      * Get note
      *
-     * @return float 
+     * @return float
      */
     public function getNote()
     {
@@ -242,7 +249,7 @@ class Episode
     /**
      * Get lien
      *
-     * @return string 
+     * @return string
      */
     public function getLien()
     {
@@ -265,19 +272,22 @@ class Episode
     /**
      * Get date
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate()
     {
         return $this->date;
     }
-    public function __construct($saison, $episode)
+    public function __construct()
     {
-        $this->saison = $saison;
-        $this->episode = $episode;
+        #$this->saison = $saison;
+        #$this->episode = $episode;
         $this->date = new \Datetime();
         $this->note = 50;
         $this->vue = 0;
+        $this->nbnoteplus =1;
+        $this->nbnotemoins =1;
+        $this->etat = True;
     }
 
     /**
@@ -296,10 +306,79 @@ class Episode
     /**
      * Get nbnote
      *
-     * @return integer 
+     * @return integer
      */
     public function getNbnote()
     {
         return $this->nbnote;
+    }
+
+    /**
+     * Set nbnoteplus
+     *
+     * @param integer $nbnoteplus
+     * @return Episode
+     */
+    public function setNbnoteplus($nbnoteplus)
+    {
+        $this->nbnoteplus = $nbnoteplus;
+
+        return $this;
+    }
+
+    /**
+     * Get nbnoteplus
+     *
+     * @return integer
+     */
+    public function getNbnoteplus()
+    {
+        return $this->nbnoteplus;
+    }
+
+    /**
+     * Set nbnotemoins
+     *
+     * @param integer $nbnotemoins
+     * @return Episode
+     */
+    public function setNbnotemoins($nbnotemoins)
+    {
+        $this->nbnotemoins = $nbnotemoins;
+
+        return $this;
+    }
+
+    /**
+     * Get nbnotemoins
+     *
+     * @return integer
+     */
+    public function getNbnotemoins()
+    {
+        return $this->nbnotemoins;
+    }
+
+    /**
+     * Set etat
+     *
+     * @param boolean $etat
+     * @return Episode
+     */
+    public function setEtat($etat)
+    {
+        $this->etat = $etat;
+
+        return $this;
+    }
+
+    /**
+     * Get etat
+     *
+     * @return boolean
+     */
+    public function getEtat()
+    {
+        return $this->etat;
     }
 }

@@ -10,5 +10,5 @@ parameters:
     mailer_host: localhost
     mailer_user: null
     mailer_password: null
-    locale: en
+    locale: fr_FR
     secret: ZjqajiQkgtPcNwSAEKfui3DHh91CZfGm4fNHtVdQ

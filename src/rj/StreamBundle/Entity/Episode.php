@@ -85,6 +85,12 @@ class Episode
      */
     private $date;
 
+    /**
+    * @var boolean $etat
+    *
+    * @ORM\Column(name="etat", type="boolean")
+    */
+    private $etat;
 
 
 
@@ -281,6 +287,7 @@ class Episode
         $this->vue = 0;
         $this->nbnoteplus =1;
         $this->nbnotemoins =1;
+        $this->etat = True;
     }
 
     /**
@@ -350,5 +357,28 @@ class Episode
     public function getNbnotemoins()
     {
         return $this->nbnotemoins;
+    }
+
+    /**
+     * Set etat
+     *
+     * @param boolean $etat
+     * @return Episode
+     */
+    public function setEtat($etat)
+    {
+        $this->etat = $etat;
+
+        return $this;
+    }
+
+    /**
+     * Get etat
+     *
+     * @return boolean
+     */
+    public function getEtat()
+    {
+        return $this->etat;
     }
 }

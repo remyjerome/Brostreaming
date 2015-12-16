@@ -18,6 +18,7 @@ class EpisodeAdmin extends Admin
             ->add('titre', 'text')
             ->add('description', 'textarea')
             ->add('lien', 'text')
+            ->add('etat')
             ;
     }
 
@@ -25,7 +26,8 @@ class EpisodeAdmin extends Admin
     {
         $datagridMapper
                 ->add('saison')
-                ->add('episode');
+                ->add('episode')
+                ->add('etat');
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -35,8 +37,8 @@ class EpisodeAdmin extends Admin
             ->add('episode', 'text')
             ->add('titre', 'text')
             #->add('description', 'textarea')
-            ->add('lien', 'text')
-            ->add('draft')
+            ->add('lien', 'url')
+            ->add('etat')
             ->add('_action', 'actions', array(
                  'actions' => array(
                  'show' => array(),
