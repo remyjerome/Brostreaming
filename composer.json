@@ -25,7 +25,9 @@
         "friendsofsymfony/jsrouting-bundle": "~1.5",
         "coresphere/console-bundle": "^0.3.1",
         "sonata-project/admin-bundle": "2.3.*",
-        "sonata-project/doctrine-orm-admin-bundle": "2.3.*"
+        "sonata-project/doctrine-orm-admin-bundle": "2.3.*",
+        "sonata-project/easy-extends-bundle": "^2.1",
+        "sonata-project/user-bundle": "^2.2"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

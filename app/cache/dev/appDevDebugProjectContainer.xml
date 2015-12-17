@@ -23,6 +23,9 @@
       <parameter key="KnpMenuBundle">Knp\Bundle\MenuBundle\KnpMenuBundle</parameter>
       <parameter key="SonataDoctrineORMAdminBundle">Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle</parameter>
       <parameter key="SonataAdminBundle">Sonata\AdminBundle\SonataAdminBundle</parameter>
+      <parameter key="SonataEasyExtendsBundle">Sonata\EasyExtendsBundle\SonataEasyExtendsBundle</parameter>
+      <parameter key="FOSUserBundle">FOS\UserBundle\FOSUserBundle</parameter>
+      <parameter key="SonataUserBundle">Sonata\UserBundle\SonataUserBundle</parameter>
       <parameter key="DebugBundle">Symfony\Bundle\DebugBundle\DebugBundle</parameter>
       <parameter key="WebProfilerBundle">Symfony\Bundle\WebProfilerBundle\WebProfilerBundle</parameter>
       <parameter key="SensioDistributionBundle">Sensio\Bundle\DistributionBundle\SensioDistributionBundle</parameter>
@@ -293,6 +296,21 @@
     <parameter key="security.authentication.session_strategy.strategy">migrate</parameter>
     <parameter key="security.access.always_authenticate_before_granting">false</parameter>
     <parameter key="security.authentication.hide_user_not_found">true</parameter>
+    <parameter key="security.acl.permission_granting_strategy.class">Symfony\Component\Security\Acl\Domain\PermissionGrantingStrategy</parameter>
+    <parameter key="security.acl.voter.class">Symfony\Component\Security\Acl\Voter\AclVoter</parameter>
+    <parameter key="security.acl.permission.map.class">Symfony\Component\Security\Acl\Permission\BasicPermissionMap</parameter>
+    <parameter key="security.acl.object_identity_retrieval_strategy.class">Symfony\Component\Security\Acl\Domain\ObjectIdentityRetrievalStrategy</parameter>
+    <parameter key="security.acl.security_identity_retrieval_strategy.class">Symfony\Component\Security\Acl\Domain\SecurityIdentityRetrievalStrategy</parameter>
+    <parameter key="security.acl.collection_cache.class">Symfony\Component\Security\Acl\Domain\AclCollectionCache</parameter>
+    <parameter key="security.acl.cache.doctrine.class">Symfony\Component\Security\Acl\Domain\DoctrineAclCache</parameter>
+    <parameter key="security.acl.dbal.provider.class">Symfony\Component\Security\Acl\Dbal\MutableAclProvider</parameter>
+    <parameter key="security.acl.dbal.schema.class">Symfony\Component\Security\Acl\Dbal\Schema</parameter>
+    <parameter key="security.acl.dbal.schema_listener.class">Symfony\Bundle\SecurityBundle\EventListener\AclSchemaListener</parameter>
+    <parameter key="security.acl.dbal.class_table_name">acl_classes</parameter>
+    <parameter key="security.acl.dbal.entry_table_name">acl_entries</parameter>
+    <parameter key="security.acl.dbal.oid_table_name">acl_object_identities</parameter>
+    <parameter key="security.acl.dbal.oid_ancestors_table_name">acl_object_identity_ancestors</parameter>
+    <parameter key="security.acl.dbal.sid_table_name">acl_security_identities</parameter>
     <parameter key="twig.class">Twig_Environment</parameter>
     <parameter key="twig.loader.filesystem.class">Symfony\Bundle\TwigBundle\Loader\FilesystemLoader</parameter>
     <parameter key="twig.loader.chain.class">Twig_Loader_Chain</parameter>
@@ -316,6 +334,7 @@
     <parameter key="twig.exception_listener.controller">twig.controller.exception:showAction</parameter>
     <parameter key="twig.form.resources" type="collection">
       <parameter>form_div_layout.html.twig</parameter>
+      <parameter>SonataUserBundle:Form:form_admin_fields.html.twig</parameter>
     </parameter>
     <parameter key="monolog.logger.class">Symfony\Bridge\Monolog\Logger</parameter>
     <parameter key="monolog.gelf.publisher.class">Gelf\MessagePublisher</parameter>
@@ -499,7 +518,12 @@
       <parameter key="default">doctrine.orm.default_entity_manager</parameter>
     </parameter>
     <parameter key="doctrine.default_entity_manager">default</parameter>
-    <parameter key="doctrine.dbal.connection_factory.types" type="collection"/>
+    <parameter key="doctrine.dbal.connection_factory.types" type="collection">
+      <parameter key="json" type="collection">
+        <parameter key="class">Sonata\Doctrine\Types\JsonType</parameter>
+        <parameter key="commented">true</parameter>
+      </parameter>
+    </parameter>
     <parameter key="doctrine.connections" type="collection">
       <parameter key="default">doctrine.dbal.default_connection</parameter>
     </parameter>
@@ -593,11 +617,35 @@
         <parameter key="cache">sonata.cache.noop</parameter>
         <parameter key="settings" type="collection"/>
       </parameter>
+      <parameter key="sonata.user.block.menu" type="collection">
+        <parameter key="contexts" type="collection">
+          <parameter>cms</parameter>
+        </parameter>
+        <parameter key="cache">sonata.cache.noop</parameter>
+        <parameter key="settings" type="collection"/>
+      </parameter>
+      <parameter key="sonata.user.block.account" type="collection">
+        <parameter key="contexts" type="collection">
+          <parameter>cms</parameter>
+        </parameter>
+        <parameter key="cache">sonata.cache.noop</parameter>
+        <parameter key="settings" type="collection"/>
+      </parameter>
+      <parameter key="sonata.block.service.text" type="collection">
+        <parameter key="contexts" type="collection">
+          <parameter>cms</parameter>
+        </parameter>
+        <parameter key="cache">sonata.cache.noop</parameter>
+        <parameter key="settings" type="collection"/>
+      </parameter>
     </parameter>
     <parameter key="sonata_block.blocks_by_class" type="collection"/>
     <parameter key="sonata_block.cache_blocks" type="collection">
       <parameter key="by_type" type="collection">
         <parameter key="sonata.admin.block.admin_list">sonata.cache.noop</parameter>
+        <parameter key="sonata.user.block.menu">sonata.cache.noop</parameter>
+        <parameter key="sonata.user.block.account">sonata.cache.noop</parameter>
+        <parameter key="sonata.block.service.text">sonata.cache.noop</parameter>
       </parameter>
     </parameter>
     <parameter key="knp_menu.factory.class">Knp\Menu\MenuFactory</parameter>
@@ -671,7 +719,7 @@
       </parameter>
     </parameter>
     <parameter key="sonata.admin.configuration.templates" type="collection">
-      <parameter key="user_block">SonataAdminBundle:Core:user_block.html.twig</parameter>
+      <parameter key="user_block">SonataUserBundle:Admin/Core:user_block.html.twig</parameter>
       <parameter key="add_block">SonataAdminBundle:Core:add_block.html.twig</parameter>
       <parameter key="layout">SonataAdminBundle::standard_layout.html.twig</parameter>
       <parameter key="ajax">SonataAdminBundle::ajax_layout.html.twig</parameter>
@@ -709,7 +757,7 @@
         <parameter key="type">sonata.admin.block.admin_list</parameter>
       </parameter>
     </parameter>
-    <parameter key="sonata.admin.security.acl_user_manager">null</parameter>
+    <parameter key="sonata.admin.security.acl_user_manager">fos_user.user_manager</parameter>
     <parameter key="sonata.admin.configuration.security.information" type="collection"/>
     <parameter key="sonata.admin.configuration.security.admin_permissions" type="collection">
       <parameter>CREATE</parameter>
@@ -743,6 +791,86 @@
       <parameter key="instanceof" type="collection"/>
     </parameter>
     <parameter key="sonata.admin.configuration.filters.persist">false</parameter>
+    <parameter key="fos_user.validator.password.class">FOS\UserBundle\Validator\PasswordValidator</parameter>
+    <parameter key="fos_user.validator.unique.class">FOS\UserBundle\Validator\UniqueValidator</parameter>
+    <parameter key="fos_user.security.interactive_login_listener.class">FOS\UserBundle\Security\InteractiveLoginListener</parameter>
+    <parameter key="fos_user.security.login_manager.class">FOS\UserBundle\Security\LoginManager</parameter>
+    <parameter key="fos_user.resetting.email.template">FOSUserBundle:Resetting:email.txt.twig</parameter>
+    <parameter key="fos_user.registration.confirmation.template">FOSUserBundle:Registration:email.txt.twig</parameter>
+    <parameter key="fos_user.storage">orm</parameter>
+    <parameter key="fos_user.firewall_name">main</parameter>
+    <parameter key="fos_user.model_manager_name">null</parameter>
+    <parameter key="fos_user.model.user.class">Sonata\UserBundle\Entity\BaseUser</parameter>
+    <parameter key="fos_user.template.engine">twig</parameter>
+    <parameter key="fos_user.profile.form.type">fos_user_profile</parameter>
+    <parameter key="fos_user.profile.form.name">fos_user_profile_form</parameter>
+    <parameter key="fos_user.profile.form.validation_groups" type="collection">
+      <parameter>Profile</parameter>
+      <parameter>Default</parameter>
+    </parameter>
+    <parameter key="fos_user.registration.confirmation.from_email" type="collection">
+      <parameter key="webmaster@example.com">webmaster</parameter>
+    </parameter>
+    <parameter key="fos_user.registration.confirmation.enabled">false</parameter>
+    <parameter key="fos_user.registration.form.type">fos_user_registration</parameter>
+    <parameter key="fos_user.registration.form.name">fos_user_registration_form</parameter>
+    <parameter key="fos_user.registration.form.validation_groups" type="collection">
+      <parameter>Registration</parameter>
+      <parameter>Default</parameter>
+    </parameter>
+    <parameter key="fos_user.change_password.form.type">fos_user_change_password</parameter>
+    <parameter key="fos_user.change_password.form.name">fos_user_change_password_form</parameter>
+    <parameter key="fos_user.change_password.form.validation_groups" type="collection">
+      <parameter>ChangePassword</parameter>
+      <parameter>Default</parameter>
+    </parameter>
+    <parameter key="fos_user.resetting.email.from_email" type="collection">
+      <parameter key="webmaster@example.com">webmaster</parameter>
+    </parameter>
+    <parameter key="fos_user.resetting.token_ttl">86400</parameter>
+    <parameter key="fos_user.resetting.form.type">fos_user_resetting</parameter>
+    <parameter key="fos_user.resetting.form.name">fos_user_resetting_form</parameter>
+    <parameter key="fos_user.resetting.form.validation_groups" type="collection">
+      <parameter>ResetPassword</parameter>
+      <parameter>Default</parameter>
+    </parameter>
+    <parameter key="fos_user.group_manager.class">FOS\UserBundle\Doctrine\GroupManager</parameter>
+    <parameter key="fos_user.model.group.class">Sonata\UserBundle\Entity\BaseGroup</parameter>
+    <parameter key="fos_user.group.form.type">fos_user_group</parameter>
+    <parameter key="fos_user.group.form.name">fos_user_group_form</parameter>
+    <parameter key="fos_user.group.form.validation_groups" type="collection">
+      <parameter>Registration</parameter>
+      <parameter>Default</parameter>
+    </parameter>
+    <parameter key="sonata.user.admin.groupname">sonata_user</parameter>
+    <parameter key="security.acl.user_voter.class">Sonata\UserBundle\Security\Authorization\Voter\UserAclVoter</parameter>
+    <parameter key="sonata.user.admin.user.class">Sonata\UserBundle\Admin\Entity\UserAdmin</parameter>
+    <parameter key="sonata.user.admin.group.class">Sonata\UserBundle\Admin\Entity\GroupAdmin</parameter>
+    <parameter key="sonata.user.admin.user.entity">Application\Sonata\UserBundle\Entity\User</parameter>
+    <parameter key="sonata.user.admin.group.entity">Application\Sonata\UserBundle\Entity\Group</parameter>
+    <parameter key="sonata.user.admin.user.translation_domain">SonataUserBundle</parameter>
+    <parameter key="sonata.user.admin.group.translation_domain">SonataUserBundle</parameter>
+    <parameter key="sonata.user.admin.user.controller">SonataAdminBundle:CRUD</parameter>
+    <parameter key="sonata.user.admin.group.controller">SonataAdminBundle:CRUD</parameter>
+    <parameter key="sonata.user.impersonating">false</parameter>
+    <parameter key="sonata.user.google.authenticator.enabled">false</parameter>
+    <parameter key="sonata.user.profile.form.type">sonata_user_profile</parameter>
+    <parameter key="sonata.user.profile.form.name">sonata_user_profile_form</parameter>
+    <parameter key="sonata.user.profile.form.validation_groups" type="collection">
+      <parameter>Profile</parameter>
+      <parameter>Default</parameter>
+    </parameter>
+    <parameter key="sonata.user.register.confirm.redirect_route">sonata_user_profile_show</parameter>
+    <parameter key="sonata.user.register.confirm.redirect_route_params" type="collection"/>
+    <parameter key="sonata.user.configuration.profile_blocks" type="collection">
+      <parameter type="collection">
+        <parameter key="position">left</parameter>
+        <parameter key="settings" type="collection">
+          <parameter key="content">&lt;h2&gt;Welcome!&lt;/h2&gt; This is a sample user profile dashboard, feel free to override it in the configuration!</parameter>
+        </parameter>
+        <parameter key="type">sonata.block.service.text</parameter>
+      </parameter>
+    </parameter>
     <parameter key="web_profiler.controller.profiler.class">Symfony\Bundle\WebProfilerBundle\Controller\ProfilerController</parameter>
     <parameter key="web_profiler.controller.router.class">Symfony\Bundle\WebProfilerBundle\Controller\RouterController</parameter>
     <parameter key="web_profiler.controller.exception.class">Symfony\Bundle\WebProfilerBundle\Controller\ExceptionController</parameter>
@@ -894,6 +1022,15 @@
       <parameter>sonata.admin.form.filter.type.daterange</parameter>
       <parameter>sonata.admin.form.filter.type.datetime</parameter>
       <parameter>sonata.admin.form.filter.type.datetime_range</parameter>
+      <parameter>fos_user.username_form_type</parameter>
+      <parameter>fos_user.profile.form.type</parameter>
+      <parameter>fos_user.registration.form.type</parameter>
+      <parameter>fos_user.change_password.form.type</parameter>
+      <parameter>fos_user.resetting.form.type</parameter>
+      <parameter>fos_user.group.form.type</parameter>
+      <parameter>sonata.user.form.type.security_roles</parameter>
+      <parameter>sonata.user.profile.form.type</parameter>
+      <parameter>sonata.user.form.gender_list</parameter>
     </parameter>
     <parameter key="sonata.core.form.type_extensions" type="collection">
       <parameter>form.type_extension.form.http_foundation</parameter>
@@ -972,7 +1109,7 @@
       </call>
       <call method="setTemplates">
         <argument type="collection">
-          <argument key="user_block">SonataAdminBundle:Core:user_block.html.twig</argument>
+          <argument key="user_block">SonataUserBundle:Admin/Core:user_block.html.twig</argument>
           <argument key="add_block">SonataAdminBundle:Core:add_block.html.twig</argument>
           <argument key="layout">SonataAdminBundle::standard_layout.html.twig</argument>
           <argument key="ajax">SonataAdminBundle::ajax_layout.html.twig</argument>
@@ -1075,7 +1212,7 @@
       </call>
       <call method="setTemplates">
         <argument type="collection">
-          <argument key="user_block">SonataAdminBundle:Core:user_block.html.twig</argument>
+          <argument key="user_block">SonataUserBundle:Admin/Core:user_block.html.twig</argument>
           <argument key="add_block">SonataAdminBundle:Core:add_block.html.twig</argument>
           <argument key="layout">SonataAdminBundle::standard_layout.html.twig</argument>
           <argument key="ajax">SonataAdminBundle::ajax_layout.html.twig</argument>
@@ -1379,6 +1516,9 @@
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.bg.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/core-bundle/Resources/translations/SonataCoreBundle.bg.xliff</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/admin-bundle/Resources/translations/SonataAdminBundle.bg.xliff</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/FOSUserBundle.bg.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/validators.bg.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/user-bundle/Resources/translations/SonataUserBundle.bg.xliff</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/coresphere/console-bundle/Resources/translations/messages.bg.yml</argument>
           </argument>
           <argument key="ca" type="collection">
@@ -1387,6 +1527,8 @@
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.ca.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/core-bundle/Resources/translations/SonataCoreBundle.ca.xliff</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/admin-bundle/Resources/translations/SonataAdminBundle.ca.xliff</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/FOSUserBundle.ca.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/user-bundle/Resources/translations/SonataUserBundle.ca.xliff</argument>
           </argument>
           <argument key="cs" type="collection">
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.cs.xlf</argument>
@@ -1394,6 +1536,9 @@
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.cs.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/core-bundle/Resources/translations/SonataCoreBundle.cs.xliff</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/admin-bundle/Resources/translations/SonataAdminBundle.cs.xliff</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/FOSUserBundle.cs.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/validators.cs.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/user-bundle/Resources/translations/SonataUserBundle.cs.xliff</argument>
           </argument>
           <argument key="cy" type="collection">
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.cy.xlf</argument>
@@ -1402,6 +1547,8 @@
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.da.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.da.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.da.xlf</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/FOSUserBundle.da.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/validators.da.yml</argument>
           </argument>
           <argument key="de" type="collection">
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.de.xlf</argument>
@@ -1409,6 +1556,9 @@
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.de.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/core-bundle/Resources/translations/SonataCoreBundle.de.xliff</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/admin-bundle/Resources/translations/SonataAdminBundle.de.xliff</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/FOSUserBundle.de.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/validators.de.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/user-bundle/Resources/translations/SonataUserBundle.de.xliff</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/coresphere/console-bundle/Resources/translations/messages.de.yml</argument>
           </argument>
           <argument key="el" type="collection">
@@ -1422,6 +1572,9 @@
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.en.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/core-bundle/Resources/translations/SonataCoreBundle.en.xliff</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/admin-bundle/Resources/translations/SonataAdminBundle.en.xliff</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/FOSUserBundle.en.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/validators.en.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/user-bundle/Resources/translations/SonataUserBundle.en.xliff</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/coresphere/console-bundle/Resources/translations/messages.en.yml</argument>
           </argument>
           <argument key="es" type="collection">
@@ -1430,16 +1583,22 @@
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.es.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/core-bundle/Resources/translations/SonataCoreBundle.es.xliff</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/admin-bundle/Resources/translations/SonataAdminBundle.es.xliff</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/FOSUserBundle.es.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/validators.es.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/user-bundle/Resources/translations/SonataUserBundle.es.xliff</argument>
           </argument>
           <argument key="et" type="collection">
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.et.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.et.xlf</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/FOSUserBundle.et.yml</argument>
           </argument>
           <argument key="eu" type="collection">
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.eu.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.eu.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/core-bundle/Resources/translations/SonataCoreBundle.eu.xliff</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/admin-bundle/Resources/translations/SonataAdminBundle.eu.xliff</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/FOSUserBundle.eu.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/validators.eu.yml</argument>
           </argument>
           <argument key="fa" type="collection">
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.fa.xlf</argument>
@@ -1447,11 +1606,16 @@
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.fa.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/core-bundle/Resources/translations/SonataCoreBundle.fa.xliff</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/admin-bundle/Resources/translations/SonataAdminBundle.fa.xliff</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/FOSUserBundle.fa.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/validators.fa.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/user-bundle/Resources/translations/SonataUserBundle.fa.xliff</argument>
           </argument>
           <argument key="fi" type="collection">
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.fi.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.fi.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/core-bundle/Resources/translations/SonataCoreBundle.fi.xliff</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/FOSUserBundle.fi.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/validators.fi.yml</argument>
           </argument>
           <argument key="fr" type="collection">
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.fr.xlf</argument>
@@ -1459,6 +1623,9 @@
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.fr.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/core-bundle/Resources/translations/SonataCoreBundle.fr.xliff</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/admin-bundle/Resources/translations/SonataAdminBundle.fr.xliff</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/FOSUserBundle.fr.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/validators.fr.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/user-bundle/Resources/translations/SonataUserBundle.fr.xliff</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/coresphere/console-bundle/Resources/translations/messages.fr.yml</argument>
           </argument>
           <argument key="gl" type="collection">
@@ -1477,6 +1644,8 @@
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.hr.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/core-bundle/Resources/translations/SonataCoreBundle.hr.xliff</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/admin-bundle/Resources/translations/SonataAdminBundle.hr.xliff</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/FOSUserBundle.hr.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/validators.hr.yml</argument>
           </argument>
           <argument key="hu" type="collection">
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.hu.xlf</argument>
@@ -1484,6 +1653,8 @@
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.hu.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/core-bundle/Resources/translations/SonataCoreBundle.hu.xliff</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/admin-bundle/Resources/translations/SonataAdminBundle.hu.xliff</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/FOSUserBundle.hu.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/validators.hu.yml</argument>
           </argument>
           <argument key="hy" type="collection">
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.hy.xlf</argument>
@@ -1500,6 +1671,9 @@
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.it.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/core-bundle/Resources/translations/SonataCoreBundle.it.xliff</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/admin-bundle/Resources/translations/SonataAdminBundle.it.xliff</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/FOSUserBundle.it.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/validators.it.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/user-bundle/Resources/translations/SonataUserBundle.it.xliff</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/coresphere/console-bundle/Resources/translations/messages.it.yml</argument>
           </argument>
           <argument key="ja" type="collection">
@@ -1508,6 +1682,8 @@
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.ja.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/core-bundle/Resources/translations/SonataCoreBundle.ja.xliff</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/admin-bundle/Resources/translations/SonataAdminBundle.ja.xliff</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/FOSUserBundle.ja.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/validators.ja.yml</argument>
           </argument>
           <argument key="lb" type="collection">
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.lb.xlf</argument>
@@ -1515,6 +1691,7 @@
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.lb.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/core-bundle/Resources/translations/SonataCoreBundle.lb.xliff</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/admin-bundle/Resources/translations/SonataAdminBundle.lb.xliff</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/FOSUserBundle.lb.yml</argument>
           </argument>
           <argument key="lt" type="collection">
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.lt.xlf</argument>
@@ -1522,6 +1699,9 @@
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.lt.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/core-bundle/Resources/translations/SonataCoreBundle.lt.xliff</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/admin-bundle/Resources/translations/SonataAdminBundle.lt.xliff</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/FOSUserBundle.lt.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/validators.lt.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/user-bundle/Resources/translations/SonataUserBundle.lt.xliff</argument>
           </argument>
           <argument key="mn" type="collection">
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.mn.xlf</argument>
@@ -1537,6 +1717,9 @@
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.nl.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/core-bundle/Resources/translations/SonataCoreBundle.nl.xliff</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/admin-bundle/Resources/translations/SonataAdminBundle.nl.xliff</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/FOSUserBundle.nl.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/validators.nl.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/user-bundle/Resources/translations/SonataUserBundle.nl.xliff</argument>
           </argument>
           <argument key="no" type="collection">
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.no.xlf</argument>
@@ -1548,6 +1731,9 @@
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.pl.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/core-bundle/Resources/translations/SonataCoreBundle.pl.xliff</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/admin-bundle/Resources/translations/SonataAdminBundle.pl.xliff</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/FOSUserBundle.pl.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/validators.pl.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/user-bundle/Resources/translations/SonataUserBundle.pl.xliff</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/coresphere/console-bundle/Resources/translations/messages.pl.yml</argument>
           </argument>
           <argument key="pt" type="collection">
@@ -1555,6 +1741,8 @@
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.pt.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/core-bundle/Resources/translations/SonataCoreBundle.pt.xliff</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/admin-bundle/Resources/translations/SonataAdminBundle.pt.xliff</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/validators.pt.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/user-bundle/Resources/translations/SonataUserBundle.pt.xliff</argument>
           </argument>
           <argument key="pt_BR" type="collection">
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.pt_BR.xlf</argument>
@@ -1562,6 +1750,9 @@
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.pt_BR.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/core-bundle/Resources/translations/SonataCoreBundle.pt_BR.xliff</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/admin-bundle/Resources/translations/SonataAdminBundle.pt_BR.xliff</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/FOSUserBundle.pt_BR.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/validators.pt_BR.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/user-bundle/Resources/translations/SonataUserBundle.pt_BR.xliff</argument>
           </argument>
           <argument key="ro" type="collection">
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.ro.xlf</argument>
@@ -1569,6 +1760,7 @@
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.ro.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/core-bundle/Resources/translations/SonataCoreBundle.ro.xliff</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/admin-bundle/Resources/translations/SonataAdminBundle.ro.xliff</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/FOSUserBundle.ro.yml</argument>
           </argument>
           <argument key="ru" type="collection">
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.ru.xlf</argument>
@@ -1576,6 +1768,9 @@
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.ru.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/core-bundle/Resources/translations/SonataCoreBundle.ru.xliff</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/admin-bundle/Resources/translations/SonataAdminBundle.ru.xliff</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/FOSUserBundle.ru.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/validators.ru.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/user-bundle/Resources/translations/SonataUserBundle.ru.xliff</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/coresphere/console-bundle/Resources/translations/messages.ru.yml</argument>
           </argument>
           <argument key="sk" type="collection">
@@ -1584,6 +1779,9 @@
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.sk.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/core-bundle/Resources/translations/SonataCoreBundle.sk.xliff</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/admin-bundle/Resources/translations/SonataAdminBundle.sk.xliff</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/FOSUserBundle.sk.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/validators.sk.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/user-bundle/Resources/translations/SonataUserBundle.sk.xliff</argument>
           </argument>
           <argument key="sl" type="collection">
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.sl.xlf</argument>
@@ -1591,6 +1789,9 @@
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.sl.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/core-bundle/Resources/translations/SonataCoreBundle.sl.xliff</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/admin-bundle/Resources/translations/SonataAdminBundle.sl.xliff</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/FOSUserBundle.sl.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/validators.sl.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/user-bundle/Resources/translations/SonataUserBundle.sl.xliff</argument>
           </argument>
           <argument key="sq" type="collection">
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.sq.xlf</argument>
@@ -1604,11 +1805,15 @@
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.sr_Latn.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.sr_Latn.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.sr_Latn.xlf</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/FOSUserBundle.sr_Latn.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/validators.sr_Latn.yml</argument>
           </argument>
           <argument key="sv" type="collection">
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.sv.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.sv.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.sv.xlf</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/FOSUserBundle.sv.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/validators.sv.yml</argument>
           </argument>
           <argument key="th" type="collection">
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.th.xlf</argument>
@@ -1617,12 +1822,16 @@
           <argument key="tr" type="collection">
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.tr.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.tr.xlf</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/FOSUserBundle.tr.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/validators.tr.yml</argument>
           </argument>
           <argument key="uk" type="collection">
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.uk.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.uk.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/core-bundle/Resources/translations/SonataCoreBundle.uk.xliff</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/admin-bundle/Resources/translations/SonataAdminBundle.uk.xliff</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/FOSUserBundle.uk.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/validators.uk.yml</argument>
           </argument>
           <argument key="vi" type="collection">
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.vi.xlf</argument>
@@ -1634,15 +1843,21 @@
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.zh_CN.xlf</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/core-bundle/Resources/translations/SonataCoreBundle.zh_CN.xliff</argument>
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/admin-bundle/Resources/translations/SonataAdminBundle.zh_CN.xliff</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/FOSUserBundle.zh_CN.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/validators.zh_CN.yml</argument>
           </argument>
           <argument key="zh_TW" type="collection">
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.zh_TW.xlf</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/user-bundle/Resources/translations/SonataUserBundle.zh_TW.xliff</argument>
           </argument>
           <argument key="lv" type="collection">
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.lv.xlf</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/FOSUserBundle.lv.yml</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/validators.lv.yml</argument>
           </argument>
           <argument key="pt_PT" type="collection">
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.pt_PT.xlf</argument>
+            <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/translations/FOSUserBundle.pt_PT.yml</argument>
           </argument>
           <argument key="ua" type="collection">
             <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Exception/../Resources/translations/security.ua.xlf</argument>
@@ -2075,6 +2290,7 @@
       <call method="addXmlMappings">
         <argument type="collection">
           <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/config/validation.xml</argument>
+          <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/config/validation.xml</argument>
         </argument>
       </call>
       <call method="enableAnnotationMapping">
@@ -2086,7 +2302,16 @@
       <call method="addObjectInitializers">
         <argument type="collection">
           <argument type="service" id="doctrine.orm.validator_initializer"/>
+          <argument type="service">
+            <service class="FOS\UserBundle\Validator\Initializer" public="false">
+              <tag name="validator.initializer"/>
+              <argument type="service" id="fos_user.user_manager"/>
+            </service>
+          </argument>
         </argument>
+      </call>
+      <call method="addXmlMapping">
+        <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/DependencyInjection/Compiler/../../Resources/config/storage-validation/orm.xml</argument>
       </call>
       <factory class="Symfony\Component\Validator\Validation" method="createValidatorBuilder"/>
     </service>
@@ -2481,6 +2706,14 @@
         </argument>
         <argument>0</argument>
       </call>
+      <call method="addListenerService">
+        <argument>security.interactive_login</argument>
+        <argument type="collection">
+          <argument>fos_user.security.interactive_login_listener</argument>
+          <argument>onSecurityInteractiveLogin</argument>
+        </argument>
+        <argument>0</argument>
+      </call>
       <call method="addSubscriberService">
         <argument>response_listener</argument>
         <argument>Symfony\Component\HttpKernel\EventListener\ResponseListener</argument>
@@ -2622,6 +2855,9 @@
       <argument>Symfony\Component\Security\Core\Authentication\Token\AnonymousToken</argument>
       <argument>Symfony\Component\Security\Core\Authentication\Token\RememberMeToken</argument>
     </service>
+    <service id="security.authentication.session_strategy" class="Symfony\Component\Security\Http\Session\SessionAuthenticationStrategy" public="false">
+      <argument>migrate</argument>
+    </service>
     <service id="security.authentication_utils" class="Symfony\Component\Security\Http\Authentication\AuthenticationUtils">
       <argument type="service" id="request_stack"/>
     </service>
@@ -2652,6 +2888,47 @@
             <service class="Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter" public="false">
               <tag name="security.voter" priority="250"/>
               <argument type="service" id="security.authentication.trust_resolver"/>
+            </service>
+          </argument>
+          <argument type="service">
+            <service class="Sonata\UserBundle\Security\Authorization\Voter\UserAclVoter" public="false">
+              <tag name="monolog.logger" channel="security"/>
+              <tag name="security.voter" priority="255"/>
+              <argument type="service" id="security.acl.provider"/>
+              <argument type="service">
+                <service class="Symfony\Component\Security\Acl\Domain\ObjectIdentityRetrievalStrategy" public="false"/>
+              </argument>
+              <argument type="service">
+                <service class="Symfony\Component\Security\Acl\Domain\SecurityIdentityRetrievalStrategy" public="false">
+                  <argument type="service" id="security.role_hierarchy"/>
+                  <argument type="service" id="security.authentication.trust_resolver"/>
+                </service>
+              </argument>
+              <argument type="service">
+                <service class="Symfony\Component\Security\Acl\Permission\BasicPermissionMap" public="false"/>
+              </argument>
+              <argument type="service" id="monolog.logger.security" on-invalid="null"/>
+            </service>
+          </argument>
+          <argument type="service">
+            <service class="Symfony\Component\Security\Acl\Voter\AclVoter" public="false">
+              <tag name="monolog.logger" channel="security"/>
+              <tag name="security.voter" priority="255"/>
+              <argument type="service" id="security.acl.provider"/>
+              <argument type="service">
+                <service class="Symfony\Component\Security\Acl\Domain\ObjectIdentityRetrievalStrategy" public="false"/>
+              </argument>
+              <argument type="service">
+                <service class="Symfony\Component\Security\Acl\Domain\SecurityIdentityRetrievalStrategy" public="false">
+                  <argument type="service" id="security.role_hierarchy"/>
+                  <argument type="service" id="security.authentication.trust_resolver"/>
+                </service>
+              </argument>
+              <argument type="service">
+                <service class="Symfony\Component\Security\Acl\Permission\BasicPermissionMap" public="false"/>
+              </argument>
+              <argument type="service" id="monolog.logger.security" on-invalid="null"/>
+              <argument>true</argument>
             </service>
           </argument>
         </argument>
@@ -2824,11 +3101,7 @@
             <tag name="security.remember_me_aware" id="demo_secured_area" provider="security.user.provider.concrete.in_memory"/>
             <argument type="service" id="security.token_storage"/>
             <argument type="service" id="security.authentication.manager"/>
-            <argument type="service">
-              <service class="Symfony\Component\Security\Http\Session\SessionAuthenticationStrategy" public="false">
-                <argument>migrate</argument>
-              </service>
-            </argument>
+            <argument type="service" id="security.authentication.session_strategy"/>
             <argument type="service">
               <service class="Symfony\Component\Security\Http\HttpUtils" public="false">
                 <argument type="service" id="router" on-invalid="null"/>
@@ -2937,6 +3210,20 @@
           <argument>false</argument>
         </service>
       </argument>
+    </service>
+    <service id="security.acl.dbal.schema" class="Symfony\Component\Security\Acl\Dbal\Schema">
+      <argument type="collection">
+        <argument key="class_table_name">acl_classes</argument>
+        <argument key="entry_table_name">acl_entries</argument>
+        <argument key="oid_table_name">acl_object_identities</argument>
+        <argument key="oid_ancestors_table_name">acl_object_identity_ancestors</argument>
+        <argument key="sid_table_name">acl_security_identities</argument>
+      </argument>
+      <argument type="service" id="doctrine.dbal.default_connection"/>
+    </service>
+    <service id="security.acl.dbal.schema_listener" class="Symfony\Bundle\SecurityBundle\EventListener\AclSchemaListener">
+      <tag name="doctrine.event_listener" connection="default" event="postGenerateSchema" lazy="1"/>
+      <argument type="service" id="security.acl.dbal.schema"/>
     </service>
     <service id="twig" class="Twig_Environment">
       <argument type="service" id="twig.loader"/>
@@ -3087,6 +3374,7 @@
                   <service class="Symfony\Bridge\Twig\Form\TwigRendererEngine" public="false">
                     <argument type="collection">
                       <argument>form_div_layout.html.twig</argument>
+                      <argument>SonataUserBundle:Form:form_admin_fields.html.twig</argument>
                     </argument>
                   </service>
                 </argument>
@@ -3214,6 +3502,10 @@
       <call method="addGlobal">
         <argument>sonata_block</argument>
         <argument type="service" id="sonata.block.twig.global"/>
+      </call>
+      <call method="addGlobal">
+        <argument>sonata_user</argument>
+        <argument type="service" id="sonata.user.twig.global"/>
       </call>
       <configurator method="configure">
         <service class="Symfony\Bundle\TwigBundle\DependencyInjection\Configurator\EnvironmentConfigurator" public="false">
@@ -3364,7 +3656,12 @@
       <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest"/>
     </service>
     <service id="doctrine.dbal.connection_factory" class="Doctrine\Bundle\DoctrineBundle\ConnectionFactory">
-      <argument type="collection"/>
+      <argument type="collection">
+        <argument key="json" type="collection">
+          <argument key="class">Sonata\Doctrine\Types\JsonType</argument>
+          <argument key="commented">true</argument>
+        </argument>
+      </argument>
     </service>
     <service id="doctrine" class="Doctrine\Bundle\DoctrineBundle\Registry">
       <argument type="service" id="service_container"/>
@@ -3415,6 +3712,23 @@
       <argument type="service">
         <service class="Symfony\Bridge\Doctrine\ContainerAwareEventManager" public="false">
           <argument type="service" id="service_container"/>
+          <call method="addEventSubscriber">
+            <argument type="service" id="sonata.easy_extends.doctrine.mapper"/>
+          </call>
+          <call method="addEventSubscriber">
+            <argument type="service">
+              <service class="FOS\UserBundle\Entity\UserListener" public="false">
+                <tag name="doctrine.event_subscriber"/>
+                <argument type="service" id="service_container"/>
+              </service>
+            </argument>
+          </call>
+          <call method="addEventListener">
+            <argument type="collection">
+              <argument>postGenerateSchema</argument>
+            </argument>
+            <argument>security.acl.dbal.schema_listener</argument>
+          </call>
         </service>
       </argument>
       <argument type="collection"/>
@@ -3463,6 +3777,8 @@
           <call method="setEntityNamespaces">
             <argument type="collection">
               <argument key="rjStreamBundle">rj\StreamBundle\Entity</argument>
+              <argument key="FOSUserBundle">FOS\UserBundle\Entity</argument>
+              <argument key="SonataUserBundle">Sonata\UserBundle\Entity</argument>
             </argument>
           </call>
           <call method="setMetadataCacheImpl">
@@ -3487,6 +3803,34 @@
                     </service>
                   </argument>
                   <argument>rj\StreamBundle\Entity</argument>
+                </call>
+                <call method="addDriver">
+                  <argument type="service">
+                    <service class="Doctrine\ORM\Mapping\Driver\SimplifiedXmlDriver" public="false">
+                      <argument type="collection">
+                        <argument key="/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/config/doctrine">FOS\UserBundle\Entity</argument>
+                        <argument key="/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/user-bundle/Resources/config/doctrine">Sonata\UserBundle\Entity</argument>
+                      </argument>
+                      <call method="setGlobalBasename">
+                        <argument>mapping</argument>
+                      </call>
+                    </service>
+                  </argument>
+                  <argument>FOS\UserBundle\Entity</argument>
+                </call>
+                <call method="addDriver">
+                  <argument type="service">
+                    <service class="Doctrine\ORM\Mapping\Driver\SimplifiedXmlDriver" public="false">
+                      <argument type="collection">
+                        <argument key="/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/config/doctrine">FOS\UserBundle\Entity</argument>
+                        <argument key="/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/user-bundle/Resources/config/doctrine">Sonata\UserBundle\Entity</argument>
+                      </argument>
+                      <call method="setGlobalBasename">
+                        <argument>mapping</argument>
+                      </call>
+                    </service>
+                  </argument>
+                  <argument>Sonata\UserBundle\Entity</argument>
                 </call>
               </service>
             </argument>
@@ -3595,6 +3939,9 @@
         <argument key="KnpMenuBundle">Knp\Bundle\MenuBundle\KnpMenuBundle</argument>
         <argument key="SonataDoctrineORMAdminBundle">Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle</argument>
         <argument key="SonataAdminBundle">Sonata\AdminBundle\SonataAdminBundle</argument>
+        <argument key="SonataEasyExtendsBundle">Sonata\EasyExtendsBundle\SonataEasyExtendsBundle</argument>
+        <argument key="FOSUserBundle">FOS\UserBundle\FOSUserBundle</argument>
+        <argument key="SonataUserBundle">Sonata\UserBundle\SonataUserBundle</argument>
         <argument key="DebugBundle">Symfony\Bundle\DebugBundle\DebugBundle</argument>
         <argument key="WebProfilerBundle">Symfony\Bundle\WebProfilerBundle\WebProfilerBundle</argument>
         <argument key="SensioDistributionBundle">Sensio\Bundle\DistributionBundle\SensioDistributionBundle</argument>
@@ -3810,7 +4157,9 @@
       <call method="add">
         <argument>sonata.block.service.text</argument>
         <argument>sonata.block.service.text</argument>
-        <argument type="collection"/>
+        <argument type="collection">
+          <argument>cms</argument>
+        </argument>
       </call>
       <call method="add">
         <argument>sonata.block.service.rss</argument>
@@ -3839,6 +4188,20 @@
         <argument>sonata.admin.block.search_result</argument>
         <argument type="collection"/>
       </call>
+      <call method="add">
+        <argument>sonata.user.block.menu</argument>
+        <argument>sonata.user.block.menu</argument>
+        <argument type="collection">
+          <argument>cms</argument>
+        </argument>
+      </call>
+      <call method="add">
+        <argument>sonata.user.block.account</argument>
+        <argument>sonata.user.block.account</argument>
+        <argument type="collection">
+          <argument>cms</argument>
+        </argument>
+      </call>
     </service>
     <service id="sonata.block.context_manager.default" class="Sonata\BlockBundle\Block\BlockContextManager">
       <argument type="service" id="sonata.block.loader.chain"/>
@@ -3846,6 +4209,9 @@
       <argument type="collection">
         <argument key="by_type" type="collection">
           <argument key="sonata.admin.block.admin_list">sonata.cache.noop</argument>
+          <argument key="sonata.user.block.menu">sonata.cache.noop</argument>
+          <argument key="sonata.user.block.account">sonata.cache.noop</argument>
+          <argument key="sonata.block.service.text">sonata.cache.noop</argument>
         </argument>
       </argument>
       <argument type="service" id="logger" on-invalid="ignore"/>
@@ -3862,6 +4228,9 @@
       <argument type="collection">
         <argument key="by_type" type="collection">
           <argument key="sonata.admin.block.admin_list">sonata.cache.noop</argument>
+          <argument key="sonata.user.block.menu">sonata.cache.noop</argument>
+          <argument key="sonata.user.block.account">sonata.cache.noop</argument>
+          <argument key="sonata.block.service.text">sonata.cache.noop</argument>
         </argument>
       </argument>
       <argument type="service" id="sonata.block.renderer.default"/>
@@ -3880,6 +4249,9 @@
       <tag name="sonata.block.loader"/>
       <argument type="collection">
         <argument>sonata.admin.block.admin_list</argument>
+        <argument>sonata.user.block.menu</argument>
+        <argument>sonata.user.block.account</argument>
+        <argument>sonata.block.service.text</argument>
       </argument>
     </service>
     <service id="sonata.block.twig.global" class="Sonata\BlockBundle\Twig\GlobalVariables">
@@ -4149,7 +4521,7 @@
       <argument type="collection"/>
       <call method="setTemplates">
         <argument type="collection">
-          <argument key="user_block">SonataAdminBundle:Core:user_block.html.twig</argument>
+          <argument key="user_block">SonataUserBundle:Admin/Core:user_block.html.twig</argument>
           <argument key="add_block">SonataAdminBundle:Core:add_block.html.twig</argument>
           <argument key="layout">SonataAdminBundle::standard_layout.html.twig</argument>
           <argument key="ajax">SonataAdminBundle::ajax_layout.html.twig</argument>
@@ -4183,6 +4555,8 @@
         <argument type="collection">
           <argument>admin.episode</argument>
           <argument>admin.news</argument>
+          <argument>sonata.user.admin.user</argument>
+          <argument>sonata.user.admin.group</argument>
         </argument>
       </call>
       <call method="setAdminGroups">
@@ -4197,6 +4571,16 @@
               <argument>admin.news</argument>
             </argument>
           </argument>
+          <argument key="sonata_user" type="collection">
+            <argument key="label">sonata_user</argument>
+            <argument key="label_catalogue">SonataUserBundle</argument>
+            <argument key="icon">&lt;i class="fa fa-folder"&gt;&lt;/i&gt;</argument>
+            <argument key="roles" type="collection"/>
+            <argument key="items" type="collection">
+              <argument>sonata.user.admin.user</argument>
+              <argument>sonata.user.admin.group</argument>
+            </argument>
+          </argument>
         </argument>
       </call>
       <call method="setAdminClasses">
@@ -4207,6 +4591,12 @@
           <argument key="rj\StreamBundle\Entity\News" type="collection">
             <argument>admin.news</argument>
           </argument>
+          <argument key="Application\Sonata\UserBundle\Entity\User" type="collection">
+            <argument>sonata.user.admin.user</argument>
+          </argument>
+          <argument key="Application\Sonata\UserBundle\Entity\Group" type="collection">
+            <argument>sonata.user.admin.group</argument>
+          </argument>
         </argument>
       </call>
     </service>
@@ -4216,6 +4606,8 @@
       <argument type="collection">
         <argument>admin.episode</argument>
         <argument>admin.news</argument>
+        <argument>sonata.user.admin.user</argument>
+        <argument>sonata.user.admin.group</argument>
       </argument>
       <argument type="service" id="service_container"/>
     </service>
@@ -4367,6 +4759,408 @@
     <service id="sonata.admin.object.manipulator.acl.admin" class="Sonata\AdminBundle\Util\AdminObjectAclManipulator">
       <argument type="service" id="form.factory"/>
       <argument>Sonata\AdminBundle\Security\Acl\Permission\MaskBuilder</argument>
+    </service>
+    <service id="sonata.easy_extends.generator.bundle" class="Sonata\EasyExtendsBundle\Generator\BundleGenerator"/>
+    <service id="sonata.easy_extends.generator.orm" class="Sonata\EasyExtendsBundle\Generator\OrmGenerator"/>
+    <service id="sonata.easy_extends.generator.odm" class="Sonata\EasyExtendsBundle\Generator\OdmGenerator"/>
+    <service id="sonata.easy_extends.generator.phpcr" class="Sonata\EasyExtendsBundle\Generator\PHPCRGenerator"/>
+    <service id="sonata.easy_extends.generator.serializer" class="Sonata\EasyExtendsBundle\Generator\SerializerGenerator"/>
+    <service id="sonata.easy_extends.doctrine.mapper" class="Sonata\EasyExtendsBundle\Mapper\DoctrineORMMapper">
+      <tag name="doctrine.event_subscriber"/>
+      <argument type="service" id="doctrine"/>
+      <argument type="collection"/>
+    </service>
+    <service id="fos_user.entity_manager" class="Doctrine\ORM\EntityManager" factory-method="getManager" factory-service="doctrine" public="false">
+      <argument>null</argument>
+    </service>
+    <service id="fos_user.security.interactive_login_listener" class="FOS\UserBundle\Security\InteractiveLoginListener">
+      <tag name="kernel.event_listener" event="security.interactive_login" method="onSecurityInteractiveLogin"/>
+      <argument type="service" id="fos_user.user_manager"/>
+    </service>
+    <service id="fos_user.security.login_manager" class="FOS\UserBundle\Security\LoginManager">
+      <argument type="service" id="security.context"/>
+      <argument type="service" id="security.user_checker.demo_secured_area"/>
+      <argument type="service" id="security.authentication.session_strategy"/>
+      <argument type="service" id="service_container"/>
+    </service>
+    <service id="fos_user.util.user_manipulator" class="FOS\UserBundle\Util\UserManipulator">
+      <argument type="service" id="fos_user.user_manager"/>
+    </service>
+    <service id="fos_user.username_form_type" class="FOS\UserBundle\Form\Type\UsernameFormType">
+      <tag name="form.type" alias="fos_user_username"/>
+      <argument type="service">
+        <service class="FOS\UserBundle\Form\DataTransformer\UserToUsernameTransformer" public="false">
+          <argument type="service" id="fos_user.user_manager"/>
+        </service>
+      </argument>
+    </service>
+    <service id="fos_user.profile.form" class="Symfony\Component\Form\Form" factory-method="createNamed" factory-service="form.factory">
+      <argument>fos_user_profile_form</argument>
+      <argument>fos_user_profile</argument>
+      <argument>null</argument>
+      <argument type="collection">
+        <argument key="validation_groups" type="collection">
+          <argument>Profile</argument>
+          <argument>Default</argument>
+        </argument>
+      </argument>
+    </service>
+    <service id="fos_user.profile.form.type" class="FOS\UserBundle\Form\Type\ProfileFormType">
+      <tag name="form.type" alias="fos_user_profile"/>
+      <argument>Sonata\UserBundle\Entity\BaseUser</argument>
+    </service>
+    <service id="fos_user.registration.form" class="Symfony\Component\Form\Form" factory-method="createNamed" factory-service="form.factory">
+      <argument>fos_user_registration_form</argument>
+      <argument>fos_user_registration</argument>
+      <argument>null</argument>
+      <argument type="collection">
+        <argument key="validation_groups" type="collection">
+          <argument>Registration</argument>
+          <argument>Default</argument>
+        </argument>
+      </argument>
+    </service>
+    <service id="fos_user.registration.form.type" class="FOS\UserBundle\Form\Type\RegistrationFormType">
+      <tag name="form.type" alias="fos_user_registration"/>
+      <argument>Sonata\UserBundle\Entity\BaseUser</argument>
+    </service>
+    <service id="fos_user.change_password.form" class="Symfony\Component\Form\Form" factory-method="createNamed" factory-service="form.factory">
+      <argument>fos_user_change_password_form</argument>
+      <argument>fos_user_change_password</argument>
+      <argument>null</argument>
+      <argument type="collection">
+        <argument key="validation_groups" type="collection">
+          <argument>ChangePassword</argument>
+          <argument>Default</argument>
+        </argument>
+      </argument>
+    </service>
+    <service id="fos_user.change_password.form.type" class="FOS\UserBundle\Form\Type\ChangePasswordFormType">
+      <tag name="form.type" alias="fos_user_change_password"/>
+    </service>
+    <service id="fos_user.change_password.form.handler.default" class="FOS\UserBundle\Form\Handler\ChangePasswordFormHandler" scope="request">
+      <argument type="service" id="fos_user.change_password.form"/>
+      <argument type="service" id="request"/>
+      <argument type="service" id="fos_user.user_manager"/>
+    </service>
+    <service id="fos_user.resetting.form" class="Symfony\Component\Form\Form" factory-method="createNamed" factory-service="form.factory">
+      <argument>fos_user_resetting_form</argument>
+      <argument>fos_user_resetting</argument>
+      <argument>null</argument>
+      <argument type="collection">
+        <argument key="validation_groups" type="collection">
+          <argument>ResetPassword</argument>
+          <argument>Default</argument>
+        </argument>
+      </argument>
+    </service>
+    <service id="fos_user.resetting.form.type" class="FOS\UserBundle\Form\Type\ResettingFormType">
+      <tag name="form.type" alias="fos_user_resetting"/>
+    </service>
+    <service id="fos_user.group.form" class="Symfony\Component\Form\Form" factory-method="createNamed" factory-service="form.factory">
+      <argument>fos_user_group_form</argument>
+      <argument>fos_user_group</argument>
+      <argument>null</argument>
+      <argument type="collection">
+        <argument key="validation_groups" type="collection">
+          <argument>Registration</argument>
+          <argument>Default</argument>
+        </argument>
+      </argument>
+    </service>
+    <service id="fos_user.group.form.type" class="FOS\UserBundle\Form\Type\GroupFormType">
+      <tag name="form.type" alias="fos_user_group"/>
+      <argument>Sonata\UserBundle\Entity\BaseGroup</argument>
+    </service>
+    <service id="sonata.user.editable_role_builder" class="Sonata\UserBundle\Security\EditableRolesBuilder">
+      <argument type="service" id="security.context"/>
+      <argument type="service" id="sonata.admin.pool"/>
+      <argument type="collection">
+        <argument key="ROLE_ADMIN" type="collection">
+          <argument>ROLE_USER</argument>
+        </argument>
+        <argument key="ROLE_SUPER_ADMIN" type="collection">
+          <argument>ROLE_USER</argument>
+          <argument>ROLE_ADMIN</argument>
+          <argument>ROLE_ALLOWED_TO_SWITCH</argument>
+        </argument>
+      </argument>
+    </service>
+    <service id="sonata.user.form.type.security_roles" class="Sonata\UserBundle\Form\Type\SecurityRolesType">
+      <tag name="form.type" alias="sonata_security_roles"/>
+      <argument type="service" id="sonata.user.editable_role_builder"/>
+    </service>
+    <service id="sonata.user.admin.user" class="Sonata\UserBundle\Admin\Entity\UserAdmin" shared="false" scope="prototype">
+      <tag name="sonata.admin" manager_type="orm" group="%sonata.user.admin.groupname%" label="users" label_catalogue="SonataUserBundle" label_translator_strategy="sonata.admin.label.strategy.underscore"/>
+      <argument>sonata.user.admin.user</argument>
+      <argument>Application\Sonata\UserBundle\Entity\User</argument>
+      <argument>SonataAdminBundle:CRUD</argument>
+      <call method="setUserManager">
+        <argument type="service" id="fos_user.user_manager"/>
+      </call>
+      <call method="setTranslationDomain">
+        <argument>SonataUserBundle</argument>
+      </call>
+      <call method="setFormTheme">
+        <argument type="collection">
+          <argument>SonataDoctrineORMAdminBundle:Form:form_admin_fields.html.twig</argument>
+        </argument>
+      </call>
+      <call method="setFilterTheme">
+        <argument type="collection">
+          <argument>SonataDoctrineORMAdminBundle:Form:filter_admin_fields.html.twig</argument>
+        </argument>
+      </call>
+      <call method="setLabelTranslatorStrategy">
+        <argument type="service" id="sonata.admin.label.strategy.underscore"/>
+      </call>
+      <call method="setManagerType">
+        <argument>orm</argument>
+      </call>
+      <call method="setModelManager">
+        <argument type="service" id="sonata.admin.manager.orm"/>
+      </call>
+      <call method="setFormContractor">
+        <argument type="service" id="sonata.admin.builder.orm_form"/>
+      </call>
+      <call method="setShowBuilder">
+        <argument type="service" id="sonata.admin.builder.orm_show"/>
+      </call>
+      <call method="setListBuilder">
+        <argument type="service" id="sonata.admin.builder.orm_list"/>
+      </call>
+      <call method="setDatagridBuilder">
+        <argument type="service" id="sonata.admin.builder.orm_datagrid"/>
+      </call>
+      <call method="setTranslator">
+        <argument type="service" id="translator"/>
+      </call>
+      <call method="setConfigurationPool">
+        <argument type="service" id="sonata.admin.pool"/>
+      </call>
+      <call method="setRouteGenerator">
+        <argument type="service" id="sonata.admin.route.default_generator"/>
+      </call>
+      <call method="setValidator">
+        <argument type="service" id="validator"/>
+      </call>
+      <call method="setSecurityHandler">
+        <argument type="service" id="sonata.admin.security.handler"/>
+      </call>
+      <call method="setMenuFactory">
+        <argument type="service" id="knp_menu.factory"/>
+      </call>
+      <call method="setRouteBuilder">
+        <argument type="service" id="sonata.admin.route.path_info"/>
+      </call>
+      <call method="setLabel">
+        <argument>users</argument>
+      </call>
+      <call method="setPersistFilters">
+        <argument>false</argument>
+      </call>
+      <call method="setTemplates">
+        <argument type="collection">
+          <argument key="user_block">SonataUserBundle:Admin/Core:user_block.html.twig</argument>
+          <argument key="add_block">SonataAdminBundle:Core:add_block.html.twig</argument>
+          <argument key="layout">SonataAdminBundle::standard_layout.html.twig</argument>
+          <argument key="ajax">SonataAdminBundle::ajax_layout.html.twig</argument>
+          <argument key="dashboard">SonataAdminBundle:Core:dashboard.html.twig</argument>
+          <argument key="list">SonataAdminBundle:CRUD:list.html.twig</argument>
+          <argument key="filter">SonataAdminBundle:Form:filter_admin_fields.html.twig</argument>
+          <argument key="show">SonataAdminBundle:CRUD:show.html.twig</argument>
+          <argument key="show_compare">SonataAdminBundle:CRUD:show_compare.html.twig</argument>
+          <argument key="edit">SonataAdminBundle:CRUD:edit.html.twig</argument>
+          <argument key="history">SonataAdminBundle:CRUD:history.html.twig</argument>
+          <argument key="history_revision_timestamp">SonataAdminBundle:CRUD:history_revision_timestamp.html.twig</argument>
+          <argument key="acl">SonataAdminBundle:CRUD:acl.html.twig</argument>
+          <argument key="action">SonataAdminBundle:CRUD:action.html.twig</argument>
+          <argument key="short_object_description">SonataAdminBundle:Helper:short-object-description.html.twig</argument>
+          <argument key="preview">SonataAdminBundle:CRUD:preview.html.twig</argument>
+          <argument key="list_block">SonataAdminBundle:Block:block_admin_list.html.twig</argument>
+          <argument key="delete">SonataAdminBundle:CRUD:delete.html.twig</argument>
+          <argument key="batch">SonataAdminBundle:CRUD:list__batch.html.twig</argument>
+          <argument key="select">SonataAdminBundle:CRUD:list__select.html.twig</argument>
+          <argument key="batch_confirmation">SonataAdminBundle:CRUD:batch_confirmation.html.twig</argument>
+          <argument key="inner_list_row">SonataAdminBundle:CRUD:list_inner_row.html.twig</argument>
+          <argument key="base_list_field">SonataAdminBundle:CRUD:base_list_field.html.twig</argument>
+          <argument key="pager_links">SonataAdminBundle:Pager:links.html.twig</argument>
+          <argument key="pager_results">SonataAdminBundle:Pager:results.html.twig</argument>
+          <argument key="tab_menu_template">SonataAdminBundle:Core:tab_menu_template.html.twig</argument>
+          <argument key="search">SonataAdminBundle:Core:search.html.twig</argument>
+          <argument key="search_result_block">SonataAdminBundle:Block:block_search_result.html.twig</argument>
+        </argument>
+      </call>
+      <call method="setSecurityInformation">
+        <argument type="collection"/>
+      </call>
+      <call method="initialize"/>
+      <call method="addExtension">
+        <argument type="service" id="sonata.admin.event.extension"/>
+      </call>
+    </service>
+    <service id="sonata.user.admin.group" class="Sonata\UserBundle\Admin\Entity\GroupAdmin" shared="false" scope="prototype">
+      <tag name="sonata.admin" manager_type="orm" group="%sonata.user.admin.groupname%" label="groups" label_catalogue="SonataUserBundle" label_translator_strategy="sonata.admin.label.strategy.underscore"/>
+      <argument>sonata.user.admin.group</argument>
+      <argument>Application\Sonata\UserBundle\Entity\Group</argument>
+      <argument>SonataAdminBundle:CRUD</argument>
+      <call method="setTranslationDomain">
+        <argument>SonataUserBundle</argument>
+      </call>
+      <call method="setFormTheme">
+        <argument type="collection">
+          <argument>SonataDoctrineORMAdminBundle:Form:form_admin_fields.html.twig</argument>
+        </argument>
+      </call>
+      <call method="setFilterTheme">
+        <argument type="collection">
+          <argument>SonataDoctrineORMAdminBundle:Form:filter_admin_fields.html.twig</argument>
+        </argument>
+      </call>
+      <call method="setLabelTranslatorStrategy">
+        <argument type="service" id="sonata.admin.label.strategy.underscore"/>
+      </call>
+      <call method="setManagerType">
+        <argument>orm</argument>
+      </call>
+      <call method="setModelManager">
+        <argument type="service" id="sonata.admin.manager.orm"/>
+      </call>
+      <call method="setFormContractor">
+        <argument type="service" id="sonata.admin.builder.orm_form"/>
+      </call>
+      <call method="setShowBuilder">
+        <argument type="service" id="sonata.admin.builder.orm_show"/>
+      </call>
+      <call method="setListBuilder">
+        <argument type="service" id="sonata.admin.builder.orm_list"/>
+      </call>
+      <call method="setDatagridBuilder">
+        <argument type="service" id="sonata.admin.builder.orm_datagrid"/>
+      </call>
+      <call method="setTranslator">
+        <argument type="service" id="translator"/>
+      </call>
+      <call method="setConfigurationPool">
+        <argument type="service" id="sonata.admin.pool"/>
+      </call>
+      <call method="setRouteGenerator">
+        <argument type="service" id="sonata.admin.route.default_generator"/>
+      </call>
+      <call method="setValidator">
+        <argument type="service" id="validator"/>
+      </call>
+      <call method="setSecurityHandler">
+        <argument type="service" id="sonata.admin.security.handler"/>
+      </call>
+      <call method="setMenuFactory">
+        <argument type="service" id="knp_menu.factory"/>
+      </call>
+      <call method="setRouteBuilder">
+        <argument type="service" id="sonata.admin.route.path_info"/>
+      </call>
+      <call method="setLabel">
+        <argument>groups</argument>
+      </call>
+      <call method="setPersistFilters">
+        <argument>false</argument>
+      </call>
+      <call method="setTemplates">
+        <argument type="collection">
+          <argument key="user_block">SonataUserBundle:Admin/Core:user_block.html.twig</argument>
+          <argument key="add_block">SonataAdminBundle:Core:add_block.html.twig</argument>
+          <argument key="layout">SonataAdminBundle::standard_layout.html.twig</argument>
+          <argument key="ajax">SonataAdminBundle::ajax_layout.html.twig</argument>
+          <argument key="dashboard">SonataAdminBundle:Core:dashboard.html.twig</argument>
+          <argument key="list">SonataAdminBundle:CRUD:list.html.twig</argument>
+          <argument key="filter">SonataAdminBundle:Form:filter_admin_fields.html.twig</argument>
+          <argument key="show">SonataAdminBundle:CRUD:show.html.twig</argument>
+          <argument key="show_compare">SonataAdminBundle:CRUD:show_compare.html.twig</argument>
+          <argument key="edit">SonataAdminBundle:CRUD:edit.html.twig</argument>
+          <argument key="history">SonataAdminBundle:CRUD:history.html.twig</argument>
+          <argument key="history_revision_timestamp">SonataAdminBundle:CRUD:history_revision_timestamp.html.twig</argument>
+          <argument key="acl">SonataAdminBundle:CRUD:acl.html.twig</argument>
+          <argument key="action">SonataAdminBundle:CRUD:action.html.twig</argument>
+          <argument key="short_object_description">SonataAdminBundle:Helper:short-object-description.html.twig</argument>
+          <argument key="preview">SonataAdminBundle:CRUD:preview.html.twig</argument>
+          <argument key="list_block">SonataAdminBundle:Block:block_admin_list.html.twig</argument>
+          <argument key="delete">SonataAdminBundle:CRUD:delete.html.twig</argument>
+          <argument key="batch">SonataAdminBundle:CRUD:list__batch.html.twig</argument>
+          <argument key="select">SonataAdminBundle:CRUD:list__select.html.twig</argument>
+          <argument key="batch_confirmation">SonataAdminBundle:CRUD:batch_confirmation.html.twig</argument>
+          <argument key="inner_list_row">SonataAdminBundle:CRUD:list_inner_row.html.twig</argument>
+          <argument key="base_list_field">SonataAdminBundle:CRUD:base_list_field.html.twig</argument>
+          <argument key="pager_links">SonataAdminBundle:Pager:links.html.twig</argument>
+          <argument key="pager_results">SonataAdminBundle:Pager:results.html.twig</argument>
+          <argument key="tab_menu_template">SonataAdminBundle:Core:tab_menu_template.html.twig</argument>
+          <argument key="search">SonataAdminBundle:Core:search.html.twig</argument>
+          <argument key="search_result_block">SonataAdminBundle:Block:block_search_result.html.twig</argument>
+        </argument>
+      </call>
+      <call method="setSecurityInformation">
+        <argument type="collection"/>
+      </call>
+      <call method="initialize"/>
+      <call method="addExtension">
+        <argument type="service" id="sonata.admin.event.extension"/>
+      </call>
+    </service>
+    <service id="sonata.user.block.menu" class="Sonata\UserBundle\Block\ProfileMenuBlockService">
+      <tag name="sonata.block"/>
+      <argument>sonata.user.block.menu</argument>
+      <argument type="service" id="templating"/>
+      <argument type="service" id="knp_menu.menu_provider"/>
+      <argument type="service" id="sonata.user.profile.menu_builder"/>
+    </service>
+    <service id="sonata.user.block.account" class="Sonata\UserBundle\Block\AccountBlockService">
+      <tag name="sonata.block"/>
+      <argument>sonata.user.block.account</argument>
+      <argument type="service" id="templating"/>
+      <argument type="service" id="security.context"/>
+    </service>
+    <service id="sonata.user.profile.menu_builder" class="Sonata\UserBundle\Menu\ProfileMenuBuilder">
+      <argument type="service" id="knp_menu.factory"/>
+      <argument type="service" id="translator"/>
+      <argument type="collection">
+        <argument type="collection">
+          <argument key="route">sonata_user_profile_edit</argument>
+          <argument key="label">link_edit_profile</argument>
+          <argument key="domain">SonataUserBundle</argument>
+          <argument key="route_parameters" type="collection"/>
+        </argument>
+        <argument type="collection">
+          <argument key="route">sonata_user_profile_edit_authentication</argument>
+          <argument key="label">link_edit_authentication</argument>
+          <argument key="domain">SonataUserBundle</argument>
+          <argument key="route_parameters" type="collection"/>
+        </argument>
+      </argument>
+      <argument type="service" id="debug.event_dispatcher"/>
+    </service>
+    <service id="sonata.user.profile.form" class="Symfony\Component\Form\Form" factory-method="createNamed" factory-service="form.factory">
+      <argument>sonata_user_profile_form</argument>
+      <argument>sonata_user_profile</argument>
+      <argument>null</argument>
+      <argument type="collection">
+        <argument key="validation_groups" type="collection">
+          <argument>Profile</argument>
+          <argument>Default</argument>
+        </argument>
+        <argument key="translation_domain">SonataUserBundle</argument>
+      </argument>
+    </service>
+    <service id="sonata.user.profile.form.type" class="Sonata\UserBundle\Form\Type\ProfileType">
+      <tag name="form.type" alias="sonata_user_profile"/>
+      <argument>Sonata\UserBundle\Entity\BaseUser</argument>
+    </service>
+    <service id="sonata.user.form.gender_list" class="Sonata\CoreBundle\Form\Type\StatusType">
+      <tag name="form.type" alias="sonata_user_gender"/>
+      <argument>Sonata\UserBundle\Entity\BaseUser</argument>
+      <argument>getGenderList</argument>
+      <argument>sonata_user_gender</argument>
+    </service>
+    <service id="sonata.user.twig.global" class="Sonata\UserBundle\Twig\GlobalVariables">
+      <argument type="service" id="service_container"/>
     </service>
     <service id="data_collector.dump" class="Symfony\Component\HttpKernel\DataCollector\DumpDataCollector">
       <tag name="data_collector" id="dump" template="@Debug/Profiler/dump.html.twig" priority="240"/>
@@ -4784,6 +5578,24 @@
         <argument key="Sonata\AdminBundle\Form\Type\Filter\DateTimeType">sonata.admin.form.filter.type.datetime</argument>
         <argument key="sonata_type_filter_datetime_range">sonata.admin.form.filter.type.datetime_range</argument>
         <argument key="Sonata\AdminBundle\Form\Type\Filter\DateTimeRangeType">sonata.admin.form.filter.type.datetime_range</argument>
+        <argument key="fos_user_username">fos_user.username_form_type</argument>
+        <argument key="FOS\UserBundle\Form\Type\UsernameFormType">fos_user.username_form_type</argument>
+        <argument key="fos_user_profile">fos_user.profile.form.type</argument>
+        <argument key="FOS\UserBundle\Form\Type\ProfileFormType">fos_user.profile.form.type</argument>
+        <argument key="fos_user_registration">fos_user.registration.form.type</argument>
+        <argument key="FOS\UserBundle\Form\Type\RegistrationFormType">fos_user.registration.form.type</argument>
+        <argument key="fos_user_change_password">fos_user.change_password.form.type</argument>
+        <argument key="FOS\UserBundle\Form\Type\ChangePasswordFormType">fos_user.change_password.form.type</argument>
+        <argument key="fos_user_resetting">fos_user.resetting.form.type</argument>
+        <argument key="FOS\UserBundle\Form\Type\ResettingFormType">fos_user.resetting.form.type</argument>
+        <argument key="fos_user_group">fos_user.group.form.type</argument>
+        <argument key="FOS\UserBundle\Form\Type\GroupFormType">fos_user.group.form.type</argument>
+        <argument key="sonata_security_roles">sonata.user.form.type.security_roles</argument>
+        <argument key="Sonata\UserBundle\Form\Type\SecurityRolesType">sonata.user.form.type.security_roles</argument>
+        <argument key="sonata_user_profile">sonata.user.profile.form.type</argument>
+        <argument key="Sonata\UserBundle\Form\Type\ProfileType">sonata.user.profile.form.type</argument>
+        <argument key="sonata_user_gender">sonata.user.form.gender_list</argument>
+        <argument key="Sonata\CoreBundle\Form\Type\StatusType">sonata.user.form.gender_list</argument>
       </argument>
       <argument type="collection">
         <argument key="Symfony\Component\Form\Extension\Core\Type\FormType" type="collection">
@@ -4948,6 +5760,20 @@
       <argument type="service" id="security.encoder_factory"/>
     </service>
     <service id="security.user_checker.demo_secured_area" class="Symfony\Component\Security\Core\User\UserChecker"/>
+    <service id="security.acl.provider" class="Symfony\Component\Security\Acl\Dbal\MutableAclProvider">
+      <argument type="service" id="doctrine.dbal.default_connection"/>
+      <argument type="service">
+        <service class="Symfony\Component\Security\Acl\Domain\PermissionGrantingStrategy" public="false"/>
+      </argument>
+      <argument type="collection">
+        <argument key="class_table_name">acl_classes</argument>
+        <argument key="entry_table_name">acl_entries</argument>
+        <argument key="oid_table_name">acl_object_identities</argument>
+        <argument key="oid_ancestors_table_name">acl_object_identity_ancestors</argument>
+        <argument key="sid_table_name">acl_security_identities</argument>
+      </argument>
+      <argument>null</argument>
+    </service>
     <service id="twig.loader" class="Symfony\Bundle\TwigBundle\Loader\FilesystemLoader">
       <tag name="twig.loader"/>
       <argument type="service" id="templating.locator"/>
@@ -4991,6 +5817,14 @@
       <call method="addPath">
         <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/admin-bundle/Resources/views</argument>
         <argument>SonataAdmin</argument>
+      </call>
+      <call method="addPath">
+        <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Resources/views</argument>
+        <argument>FOSUser</argument>
+      </call>
+      <call method="addPath">
+        <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/sonata-project/user-bundle/Resources/views</argument>
+        <argument>SonataUser</argument>
       </call>
       <call method="addPath">
         <argument>/Users/remy/Documents/Web/Brostreaming/www/vendor/symfony/symfony/src/Symfony/Bundle/DebugBundle/Resources/views</argument>
@@ -5090,6 +5924,65 @@
       </call>
     </service>
     <service id="sonata.admin.security.handler" class="Sonata\AdminBundle\Security\Handler\NoopSecurityHandler"/>
+    <service id="fos_user.mailer" class="FOS\UserBundle\Mailer\Mailer">
+      <argument type="service" id="swiftmailer.mailer.default"/>
+      <argument type="service" id="router"/>
+      <argument type="service" id="templating"/>
+      <argument type="collection">
+        <argument key="confirmation.template">FOSUserBundle:Registration:email.txt.twig</argument>
+        <argument key="resetting.template">FOSUserBundle:Resetting:email.txt.twig</argument>
+        <argument key="from_email" type="collection">
+          <argument key="confirmation" type="collection">
+            <argument key="webmaster@example.com">webmaster</argument>
+          </argument>
+          <argument key="resetting" type="collection">
+            <argument key="webmaster@example.com">webmaster</argument>
+          </argument>
+        </argument>
+      </argument>
+    </service>
+    <service id="fos_user.util.email_canonicalizer" class="FOS\UserBundle\Util\Canonicalizer"/>
+    <service id="fos_user.util.token_generator" class="FOS\UserBundle\Util\TokenGenerator">
+      <argument type="service" id="logger" on-invalid="ignore"/>
+    </service>
+    <service id="fos_user.user_manager" class="Sonata\UserBundle\Entity\UserManager">
+      <argument type="service" id="security.encoder_factory"/>
+      <argument type="service" id="fos_user.util.email_canonicalizer"/>
+      <argument type="service" id="fos_user.util.email_canonicalizer"/>
+      <argument type="service" id="fos_user.entity_manager"/>
+      <argument>Sonata\UserBundle\Entity\BaseUser</argument>
+    </service>
+    <service id="fos_user.profile.form.handler" class="FOS\UserBundle\Form\Handler\ProfileFormHandler" scope="request">
+      <argument type="service" id="fos_user.profile.form"/>
+      <argument type="service" id="request"/>
+      <argument type="service" id="fos_user.user_manager"/>
+    </service>
+    <service id="fos_user.registration.form.handler" class="FOS\UserBundle\Form\Handler\RegistrationFormHandler" scope="request">
+      <argument type="service" id="fos_user.registration.form"/>
+      <argument type="service" id="request"/>
+      <argument type="service" id="fos_user.user_manager"/>
+      <argument type="service" id="fos_user.mailer"/>
+      <argument type="service" id="fos_user.util.token_generator"/>
+    </service>
+    <service id="fos_user.resetting.form.handler" class="FOS\UserBundle\Form\Handler\ResettingFormHandler" scope="request">
+      <argument type="service" id="fos_user.resetting.form"/>
+      <argument type="service" id="request"/>
+      <argument type="service" id="fos_user.user_manager"/>
+    </service>
+    <service id="fos_user.group_manager" class="Sonata\UserBundle\Entity\GroupManager">
+      <argument type="service" id="fos_user.entity_manager"/>
+      <argument>Sonata\UserBundle\Entity\BaseGroup</argument>
+    </service>
+    <service id="fos_user.group.form.handler" class="FOS\UserBundle\Form\Handler\GroupFormHandler" scope="request">
+      <argument type="service" id="fos_user.group.form"/>
+      <argument type="service" id="request"/>
+      <argument type="service" id="fos_user.group_manager"/>
+    </service>
+    <service id="sonata.user.profile.form.handler" class="Sonata\UserBundle\Form\Handler\ProfileFormHandler" scope="request">
+      <argument type="service" id="sonata.user.profile.form"/>
+      <argument type="service" id="request"/>
+      <argument type="service" id="fos_user.user_manager"/>
+    </service>
     <service id="knp_menu.menu_provider" class="Knp\Menu\Provider\ChainProvider">
       <argument type="collection">
         <argument type="service">
@@ -5118,6 +6011,7 @@
     </service>
     <service id="session.storage" alias="session.storage.native"/>
     <service id="event_dispatcher" alias="debug.event_dispatcher"/>
+    <service id="security.acl.dbal.connection" alias="doctrine.dbal.default_connection"/>
     <service id="swiftmailer.spool" alias="swiftmailer.mailer.default.spool"/>
     <service id="swiftmailer.transport.real" alias="swiftmailer.mailer.default.transport.real"/>
     <service id="swiftmailer.plugin.messagelogger" alias="swiftmailer.mailer.default.plugin.messagelogger"/>
@@ -5132,6 +6026,10 @@
     <service id="sonata.block.context_manager" alias="sonata.block.context_manager.default"/>
     <service id="sonata.block.cache.handler" alias="sonata.block.cache.handler.default"/>
     <service id="sonata.block.renderer" alias="sonata.block.renderer.default"/>
+    <service id="fos_user.util.username_canonicalizer" alias="fos_user.util.email_canonicalizer"/>
+    <service id="fos_user.change_password.form.handler" alias="fos_user.change_password.form.handler.default"/>
+    <service id="sonata.user.authentication.form" alias="fos_user.profile.form"/>
+    <service id="sonata.user.authentication.form_handler" alias="fos_user.profile.form.handler"/>
     <service id="sensio.distribution.webconfigurator" alias="sensio_distribution.webconfigurator"/>
     <service id="console.command.sensiolabs_security_command_securitycheckercommand" alias="sensio_distribution.security_checker.command"/>
   </services>
